@@ -61,6 +61,7 @@ Esta estructura ya esta en el archivo `main.ipynb`. Es solo una base para empeza
 ---
 
 ## Recursos
-*   **Link del Dataset:** (Se encuentra en el archivo `Docs/microproyecto_CNN.pdf`).
+*   **Link del Dataset:** (Se encuentra en el archivo `Docs/microproyecto_CNN.pdf`). 
+* Dataset link: https://www.kaggle.com/datasets/rm1000/brain-tumor-mri-scans?resource=download
 *   **Plantilla LaTeX:** `Docs/Template-Curso-Tecnicas-de-Deep-Learning-latex/`
 *   **Código Base:** `main.ipynb`
