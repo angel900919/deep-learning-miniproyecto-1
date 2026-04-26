@@ -57,3 +57,6 @@ checkpoints/
 data/
 dataset/
 datasets/
+
+# Ignorar carpetas de datos
+Ricardo/archive/
