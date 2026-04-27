@@ -1,0 +1,91 @@
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}
+\usepackage{graphicx}
+\overrideIEEEmargins
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphics}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+
+\title{\LARGE \bf
+Clasificación Multiclase de Tumores Cerebrales mediante Redes Neuronales Convolucionales (TensorFlow)
+}
+
+\author{
+Andres Javier Rambal Vecino,
+Juan Manuel Gómez,
+Ricardo Pabón
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{abstract}
+El diagnóstico temprano de tumores cerebrales mediante resonancia magnética (MRI) es un pilar fundamental de la oncología moderna. Este trabajo detalla el desarrollo de una arquitectura de Red Neuronal Convolucional (CNN) personalizada, denominada MedicalCNN, implementada sobre el ecosistema TensorFlow/Keras. El modelo fue entrenado para clasificar imágenes de MRI en cuatro categorías: Glioma, Meningioma, Tumor Pituitario y Tejido Sano. Mediante una estrategia de división estratificada y normalización de píxeles, se alcanzó una exactitud del 85.3\%. Los resultados destacan una capacidad excepcional del 99\% de recall para identificar tejido sano, demostrando la viabilidad del modelo para sistemas de triaje automatizado.
+\end{abstract}
+
+\section{Introducción}
+La interpretación de imágenes de Resonancia Magnética (MRI) cerebral es una tarea compleja que requiere alta precisión para diferenciar entre neoplasias morfológicamente similares como el Glioma y el Meningioma. La variabilidad inter-observador en el diagnóstico clínico justifica la necesidad de herramientas de apoyo basadas en Inteligencia Artificial.
+
+Las Redes Neuronales Convolucionales (CNN) han revolucionado este campo al permitir la extracción automática de características espaciales. Inspirados en arquitecturas clásicas como AlexNet \cite{c1}, este proyecto propone una red profunda que utiliza activaciones ReLU y técnicas de regularización para clasificar patologías cerebrales. El enfoque se centra en la robustez estadística y la generalización, optimizando el flujo de datos mediante la API de TensorFlow para garantizar un aprendizaje eficiente y estable \cite{c6}.
+
+\section{Metodología}
+
+\subsection{Dataset y Análisis Exploratorio}
+Se utilizó un dataset de 7,023 imágenes de MRI. La distribución de frecuencias (Fig. 1) muestra una base de datos relativamente balanceada con 1,621 Gliomas, 1,645 Meningiomas, 1,757 Tumores Pituitarios y 2,000 casos de Tejido Sano. Para asegurar la integridad científica, se empleó una división estratificada: 70\% entrenamiento, 15\% validación y 15\% prueba.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\linewidth]{distribucion_clases.png}
+    \caption{Distribución de clases en el dataset de MRI cerebral.}
+\end{figure}
+
+\subsection{Preprocesamiento y Pipeline de Datos}
+A diferencia de modelos pre-entrenados, el preprocesamiento se adaptó específicamente para este dominio. Las imágenes fueron redimensionadas a 224x224 píxeles y normalizadas al rango $[0, 1]$ mediante división por escalares. Para fortalecer la robustez frente a variaciones en la captura de la imagen, se aplicó aumentación de datos mediante volteos horizontales aleatorios durante el entrenamiento.
+
+\subsection{Arquitectura MedicalCNN}
+Se implementó un modelo secuencial compuesto por cuatro bloques de extracción de características. Cada bloque integra una capa Conv2D (kernel 3x3), seguida de Batch Normalization para estabilizar el aprendizaje y MaxPooling (2x2) para reducción espacial. El clasificador final consta de una capa densa de 512 unidades, una capa de Dropout (0.5) para mitigar el sobreajuste y una salida Softmax para la proyección de probabilidades multiclase.
+
+\section{Resultados}
+
+\subsection{Curvas de Aprendizaje}
+El entrenamiento se extendió por 15 épocas utilizando el optimizador Adam. Como se observa en la Fig. 2, la pérdida decreció consistentemente, mientras que la precisión superó rápidamente el umbral del 80\%, indicando que los kernels de la red capturaron patrones relevantes desde las primeras iteraciones.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\linewidth]{curvas.png}
+    \caption{Evolución de la pérdida y precisión en los sets de entrenamiento y validación.}
+\end{figure}
+
+\subsection{Métricas de Clasificación}
+En el set de prueba, la MedicalCNN alcanzó una \textbf{exactitud del 85.3\%}. El análisis por clase revela un desempeño clínico crítico: el **recall para tejido sano fue del 99\%**, lo que minimiza drásticamente el riesgo de omitir patologías. El tumor Pituitario obtuvo un F1-Score de 0.93, confirmando su alta discriminabilidad visual.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{matriz.png}
+    \caption{Matriz de confusión de la clasificación multiclase en el set de prueba.}
+\end{figure}
+
+\subsection{Análisis Cualitativo}
+La Fig. 4 ilustra la concordancia entre la realidad y las predicciones. El modelo demuestra una excelente capacidad para localizar masas tumorales. Sin embargo, se observa confusión entre Meningiomas (precisión de 0.70) y Gliomas, debido a las intensidades de señal compartidas en cortes periféricos del cerebro.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{Predicciones.png}
+    \caption{Comparativa visual de predicciones vs. etiquetas reales.}
+\end{figure}
+
+\section{Discusión y Conclusiones}
+La implementación en TensorFlow valida la arquitectura MedicalCNN como un extractor de rasgos robusto para MRI. El alto recall en tejido sano sugiere que el modelo es apto para filtrar casos negativos con alta seguridad clínica. La ambigüedad observada entre meningiomas y gliomas plantea como trabajo futuro la exploración de arquitecturas residuales (ResNet) para capturar micro-texturas que permitan una diferenciación más fina entre neoplasias malignas.
+
+\begin{thebibliography}{99}
+\bibitem{c1} Krizhevsky et al., ``ImageNet Classification with Deep CNNs,'' NIPS, 2012.
+\bibitem{c2} Cheng et al., ``Enhanced performance of brain tumor classification via region augmentation,'' PLOS ONE, 2015.
+\bibitem{c6} Kingma & Ba, ``Adam: A method for stochastic optimization,'' ICLR, 2015.
+\end{thebibliography}
+
+\end{document}
